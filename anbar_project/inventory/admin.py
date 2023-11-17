@@ -13,7 +13,8 @@ class ItemAdmin(admin.ModelAdmin):
                     "description",
                     "status",
                     "delivery_date",
-                    "image_display")
+                    "image_display",
+                    "image")
     
 
 

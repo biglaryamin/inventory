@@ -29,12 +29,5 @@ class Item(models.Model):
     delivery_date = models.DateTimeField(auto_now_add=True, blank=True)
 
 
-    # def image_tag(self):
-    #     from django.utils.html import escape
-    #     return u'<img src="%s" />' % escape(<URL to the image>)
-    # image_tag.short_description = 'Image'
-    # image_tag.allow_tags = True
-
-
     def __str__(self):
         return self.name
