@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'inventory',
     'accounts',
     'rest_framework',
+    'imagekit',
 ]
 
 MIDDLEWARE = [

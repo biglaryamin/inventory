@@ -1,14 +1,22 @@
 from django.contrib import admin
 from .models import Item
 
+from imagekit.admin import AdminThumbnail
 
-# admin.site.register(Item)
 
 @admin.register(Item)
 class ItemAdmin(admin.ModelAdmin):
+
+
     list_display = ("name",
                     "number",
                     "description",
-                    "picture",
                     "status",
-                    "delivery_date")
+                    "delivery_date",
+                    "image_display")
+    
+
+
+    image_display = AdminThumbnail(image_field='avatar_thumbnail')
+    image_display.short_description = 'Image'
+    readonly_fields = ['image_display']  # this is for the change form
