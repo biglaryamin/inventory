@@ -6,6 +6,8 @@ services:
     command: gunicorn anbar_project.wsgi --bind 0.0.0.0:8000
     volumes:
       - ./anbar_project:/app
+      - static_volume:/app/static
+      - media_volume:/app/media
     expose:
       - "8000"
     environment:
@@ -19,6 +21,13 @@ services:
       - "80:80"
     volumes:
       - ./default.conf:/etc/nginx/conf.d/default.conf
+      - static_volume:/home/app/static
+      - media_volume:/home/app/media
+
     restart: always
     depends_on:
       - backend
+
+volumes:
+  static_volume:
+  media_volume:
