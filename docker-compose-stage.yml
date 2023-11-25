@@ -8,8 +8,10 @@ services:
       - ./anbar_project:/app
       - static_volume:/app/static
       - media_volume:/app/media
-    expose:
-      - "8000"
+    # expose:
+    #   - "8000"
+    ports:
+      - "8000:8000"
     environment:
       - SECRET_KEY=test
       - DEBUG=True
