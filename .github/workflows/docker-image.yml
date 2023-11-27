@@ -8,10 +8,10 @@ on:
 
 jobs:
 
-  build:
+  Test:
 
+    name: Test
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: Setup Docker-Compose
@@ -23,3 +23,10 @@ jobs:
 #    - name: Migrate
 #      run: docker-compose exec $(docker ps | grep "backend" | awk '{print $1}') sh -c "python manage.py migrate"
 
+
+  Deploy:
+    if: ${{ always() && contains(join(needs.*.result, ','), 'success') }}
+    name: Deploy
+    needs: Test
+    runs-on: ubuntu-latest
+    run: echo "Success"
