@@ -5,22 +5,38 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('inventory', '0003_rename_picture_item_image'),
+        ("inventory", "0003_rename_picture_item_image"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='item',
-            name='image',
+            model_name="item",
+            name="image",
         ),
         migrations.CreateModel(
-            name='ItemImage',
+            name="ItemImage",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('image', models.ImageField(upload_to='')),
-                ('item', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='images', to='inventory.item')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("image", models.ImageField(upload_to="")),
+                (
+                    "item",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="images",
+                        to="inventory.item",
+                    ),
+                ),
             ],
         ),
     ]

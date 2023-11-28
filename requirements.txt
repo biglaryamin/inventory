@@ -13,3 +13,7 @@ tzdata==2023.3
 
 # deployment module(s)
 gunicorn
+
+# Reformat and Test
+black
+flake8

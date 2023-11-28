@@ -4,19 +4,18 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('inventory', '0004_remove_item_image_itemimage'),
+        ("inventory", "0004_remove_item_image_itemimage"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='item',
-            name='image',
-            field=models.ImageField(default=1, upload_to=''),
+            model_name="item",
+            name="image",
+            field=models.ImageField(default=1, upload_to=""),
             preserve_default=False,
         ),
         migrations.DeleteModel(
-            name='ItemImage',
+            name="ItemImage",
         ),
     ]
