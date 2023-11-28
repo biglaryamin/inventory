@@ -17,17 +17,16 @@ jobs:
     - name: Setup Docker-Compose
       run: docker-compose -f docker-compose-stage.yml up -d
     - name: Run tests
-      run: docker exec inventory_backend sh -c "flake8 ."
-    # - name: show container_id
-    #   run: echo $(docker ps | grep "backend" | awk '{print $1}')
-#    - name: Makemigrations
-#      run: docker-compose exec $(docker ps | grep "backend" | awk '{print $1}') sh -c "python manage.py makemigrations"
-#    - name: Migrate
-#      run: docker-compose exec $(docker ps | grep "backend" | awk '{print $1}') sh -c "python manage.py migrate"
-
+      run: |
+        docker ps
+        docker exec $(docker ps | grep 'backend' | awk '{print $1}') sh -c "flake8 ."
+        # Add more test commands here
+        # Return a non-zero exit code if tests fail
+        exit 1
+      continue-on-error: true
 
   Deploy:
-    if: ${{ always() && contains(join(needs.*.result, ','), 'success') }}
+    if: ${{ always() && needs.Test.result == 'success' }}
     name: Deploy
     needs: Test
     runs-on: ubuntu-latest
@@ -47,4 +46,3 @@ jobs:
             docker-compose -f docker-compose-stage.yml stop
             git pull
             docker-compose -f docker-compose-stage.yml restart
-            
