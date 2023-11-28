@@ -1,0 +1,14 @@
+[flake8]
+
+exclude =
+    .git,
+    .gitignore,
+    __pycache__,
+    docs/source/conf.py,
+    old,
+    build,
+    dist,
+    venv,
+    .env,
+    settings.py,
+    __init__
