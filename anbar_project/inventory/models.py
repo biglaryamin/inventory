@@ -6,14 +6,16 @@ from imagekit.processors import ResizeToFill
 class Item(models.Model):
     name = models.CharField(max_length=40)
     number = models.IntegerField()
-    description = models.TextField()
-    image = models.ImageField()
+    description = models.TextField(null=True, blank=True)
+    image = models.ImageField(null=True, blank=True)
 
     avatar_thumbnail = ImageSpecField(
         source="image",
         processors=[ResizeToFill(100, 50)],
         format="JPEG",
         options={"quality": 60},
+        null=True,
+        blank=True
     )
 
     ITEM_STATUS = (
