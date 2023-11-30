@@ -14,8 +14,6 @@ class Item(models.Model):
         processors=[ResizeToFill(100, 50)],
         format="JPEG",
         options={"quality": 60},
-        null=True,
-        blank=True
     )
 
     ITEM_STATUS = (
