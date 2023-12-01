@@ -18,5 +18,7 @@ Faker
 gunicorn
 
 # Reformat and Test
+pytest
+pytest-django
 black
 flake8
