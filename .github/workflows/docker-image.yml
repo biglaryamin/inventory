@@ -32,12 +32,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Print Secret Values
-        run: |
-          echo "Username: ${{ secrets.USERNAME }}"
-          echo "Password: ${{ secrets.PASSWORD }}"
-          echo "Host: ${{ secrets.HOST }}"
-          echo "Port: ${{ secrets.PORT }}"
       - name: Connect and execute commands
         uses: appleboy/ssh-action@master
         with:
