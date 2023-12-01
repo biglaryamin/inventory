@@ -4,20 +4,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('inventory', '0005_item_image_delete_itemimage'),
+        ("inventory", "0005_item_image_delete_itemimage"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='item',
-            name='description',
+            model_name="item",
+            name="description",
             field=models.TextField(blank=True, null=True),
         ),
         migrations.AlterField(
-            model_name='item',
-            name='image',
-            field=models.ImageField(blank=True, null=True, upload_to=''),
+            model_name="item",
+            name="image",
+            field=models.ImageField(blank=True, null=True, upload_to=""),
         ),
     ]
