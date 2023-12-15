@@ -1,5 +1,6 @@
 from .models import Item
 from django.http import HttpResponse
+from pathlib import Path
 
 # drf
 from django.contrib.auth.models import User, Group
@@ -7,9 +8,24 @@ from rest_framework import viewsets
 from rest_framework import permissions
 from .serializers import UserSerializer, GroupSerializer, ItemSerializer
 
+# 3rd party
+import pandas as pd
+
+import os
+BASE_DIR = Path(__file__).resolve().parent.parent
+
 
 def add_item(request):
-    return HttpResponse("Test Page")
+    file_path = os.path.join(BASE_DIR, "/source.xlsx")
+    file_path = "/home/mohammadamin/Desktop/inventory_project/inventory/anbar_project/source.xlsx"
+    print(file_path)
+    df = pd.read_excel(file_path)
+    for _, row in df.iterrows():
+        row_list = row.to_list()
+        item = Item.objects.create(name=row_list[1], number=row_list[2],description=row_list[3],status=row_list[4])
+        item.save()
+    
+    return HttpResponse("Item added")
 
 
 class UserViewSet(viewsets.ModelViewSet):
