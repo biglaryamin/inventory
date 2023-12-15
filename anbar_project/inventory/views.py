@@ -8,7 +8,7 @@ from rest_framework import permissions
 from .serializers import UserSerializer, GroupSerializer, ItemSerializer
 
 
-def test(request):
+def add_item(request):
     return HttpResponse("Test Page")
 
 

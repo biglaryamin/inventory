@@ -13,7 +13,7 @@ router.register(r"items", views.ItemViewSet)
 app_name = "inventory"
 urlpatterns = [
     path("", include(router.urls)),
-    path("test", views.test, name="test"),
+    path("add_item", views.add_item, name="add_item"),
     path(
         "api-auth/",
         include("rest_framework.urls", namespace="rest_framework"),
