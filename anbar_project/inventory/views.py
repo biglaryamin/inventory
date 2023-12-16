@@ -18,26 +18,54 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from .forms import FileUploadForm
+from .models import Item
+import pandas as pd
+
+
+
 def add_item(request):
     form = FileUploadForm()
+
     if request.method == 'POST':
         form = FileUploadForm(request.POST, request.FILES)
+
         if form.is_valid():
             uploaded_file = form.cleaned_data['file']
+
             try:
                 df = pd.read_excel(uploaded_file)
+
                 for _, row in df.iterrows():
-                    row_list = row.to_list()
-                    item = Item.objects.create(name=row_list[1], number=row_list[2],description=row_list[3],status=row_list[4])
+                    name = row[1]
+                    number = row[2]
+                    description = row[3]
+                    status = row[4]
+
+                    # Check if a similar item already exists
+                    if Item.objects.filter(name=name, number=number, status=status).exists():
+                        messages.warning(request, f"Item with name: {name}, number: {number}, status: {status} already exists. Skipping.")
+                        continue
+
+                    # If not, add the item
+                    item = Item.objects.create(
+                        name=name,
+                        number=number,
+                        description=description,
+                        status=status
+                    )
                     item.save()
+
                 messages.success(request, "Items saved successfully")
-            except:
-                messages.error(request, "Something went wrong with your file!")                
+            except Exception as e:
+                messages.error(request, f"Something went wrong with your file: {str(e)}")
         else:
-            form = FileUploadForm()
-    
-    # return HttpResponse("Item added")
-    return render(request, "inventory/add_item.html", {'form':form})
+            messages.error(request, "Form is not valid.")
+
+    return render(request, "inventory/add_item.html", {'form': form})
+
 
 
 class UserViewSet(viewsets.ModelViewSet):
