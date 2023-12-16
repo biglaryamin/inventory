@@ -10,6 +10,16 @@ from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
 from rest_framework import permissions
 from .serializers import UserSerializer, GroupSerializer, ItemSerializer
+from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated, AllowAny
+
+from django.utils.decorators import method_decorator
+
+from django.views.decorators.csrf import csrf_exempt
+
 
 # 3rd party
 import pandas as pd
@@ -92,10 +102,39 @@ class GroupViewSet(viewsets.ModelViewSet):
 
 
 class ItemViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows groups to be viewed or edited.
-    """
-
     queryset = Item.objects.all()
-    serializer_class = GroupSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = ItemSerializer
+
+    # Other actions for CRUD operations
+
+    @action(detail=False, methods=['post'], url_path='item')
+    @csrf_exempt
+    def add_item(self, request):
+        try:
+            uploaded_file = request.data['file']
+            df = pd.read_excel(uploaded_file)
+            print(df)
+
+            for _, row in df.iterrows():
+                name = row.iloc[1]
+                number = row.iloc[2]
+                description = row.iloc[3]
+                status = row.iloc[4]
+
+                if Item.objects.filter(name=name, number=number, status=status).exists():
+                    messages.warning(
+                        request,
+                        f"Item with name: {name}, number: {number}, status: {status} already exists. Skipping.",
+                    )
+                    continue
+
+                item = Item.objects.create(
+                    name=name, number=number, description=description, status=status
+                )
+                item.save()
+
+            messages.success(request, "Items saved successfully")
+            return Response({"message": "Items saved successfully"}, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            messages.error(request, f"Something went wrong with your file: {str(e)}")
+            return Response({"error": f"Something went wrong with your file: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
