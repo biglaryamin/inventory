@@ -19,7 +19,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.utils.decorators import method_decorator
 
 from django.views.decorators.csrf import csrf_exempt
-
+from .serializers import UploadSerializer
 
 # 3rd party
 import pandas as pd
@@ -27,7 +27,7 @@ import pandas as pd
 import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+from rest_framework.viewsets import ViewSet
 
 from django.contrib import messages
 from django.shortcuts import render, redirect
@@ -138,3 +138,38 @@ class ItemViewSet(viewsets.ModelViewSet):
         except Exception as e:
             messages.error(request, f"Something went wrong with your file: {str(e)}")
             return Response({"error": f"Something went wrong with your file: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+
+
+class UploadViewSet(ViewSet):
+    serializer_class = UploadSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def list(self, request):
+        return Response("GET API")
+    
+    def create(self, request):
+        file_uploaded = request.FILES.get('file_uploaded')
+        df = pd.read_excel(file_uploaded)
+
+        for _, row in df.iterrows():
+            name = row.iloc[1]
+            number = row.iloc[2]
+            description = row.iloc[3]
+            status = row.iloc[4]
+
+            if Item.objects.filter(name=name, number=number, status=status).exists():
+                messages.warning(
+                    request,
+                    f"Item with name: {name}, number: {number}, status: {status} already exists. Skipping.",
+                )
+                continue
+
+            item = Item.objects.create(
+                name=name, number=number, description=description, status=status
+            )
+            item.save()
+
+        content_type = file_uploaded.content_type
+        response = "POST API and you havee uploaded a {} file".format(content_type)
+        return Response(response)
