@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from pathlib import Path
 from .forms import FileUploadForm
+from django.contrib import messages
 
 # drf
 from django.contrib.auth.models import User, Group
@@ -23,11 +24,15 @@ def add_item(request):
         form = FileUploadForm(request.POST, request.FILES)
         if form.is_valid():
             uploaded_file = form.cleaned_data['file']
-            df = pd.read_excel(uploaded_file)
-            for _, row in df.iterrows():
-                row_list = row.to_list()
-                item = Item.objects.create(name=row_list[1], number=row_list[2],description=row_list[3],status=row_list[4])
-                item.save()
+            try:
+                df = pd.read_excel(uploaded_file)
+                for _, row in df.iterrows():
+                    row_list = row.to_list()
+                    item = Item.objects.create(name=row_list[1], number=row_list[2],description=row_list[3],status=row_list[4])
+                    item.save()
+                messages.success(request, "Items saved successfully")
+            except:
+                messages.error(request, "Something went wrong with your file!")                
         else:
             form = FileUploadForm()
     
