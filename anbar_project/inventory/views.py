@@ -1,5 +1,6 @@
 from .models import Item
 from django.http import HttpResponse
+from django.shortcuts import render
 from pathlib import Path
 
 # drf
@@ -17,6 +18,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 def add_item(request):
     file_path = os.path.join(BASE_DIR, "/source.xlsx")
+    print(f"-----------------{os.path.join(BASE_DIR, 'templates')}----------------")
     file_path = "/home/mohammadamin/Desktop/inventory_project/inventory/anbar_project/source.xlsx"
     print(file_path)
     df = pd.read_excel(file_path)
@@ -25,7 +27,8 @@ def add_item(request):
         item = Item.objects.create(name=row_list[1], number=row_list[2],description=row_list[3],status=row_list[4])
         item.save()
     
-    return HttpResponse("Item added")
+    # return HttpResponse("Item added")
+    return render(request, "inventory/add_item.html")
 
 
 class UserViewSet(viewsets.ModelViewSet):
