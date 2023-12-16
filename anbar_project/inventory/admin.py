@@ -16,6 +16,7 @@ class ItemAdmin(admin.ModelAdmin):
         "image",
     )
 
+    search_fields = ["name","status","description","delivery_date"]
     image_display = AdminThumbnail(image_field="avatar_thumbnail")
     image_display.short_description = "Image"
     readonly_fields = ["image_display"]  # this is for the change form
