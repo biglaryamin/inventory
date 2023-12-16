@@ -15,6 +15,7 @@ from .serializers import UserSerializer, GroupSerializer, ItemSerializer
 import pandas as pd
 
 import os
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -25,15 +26,14 @@ from .models import Item
 import pandas as pd
 
 
-
 def add_item(request):
     form = FileUploadForm()
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = FileUploadForm(request.POST, request.FILES)
 
         if form.is_valid():
-            uploaded_file = form.cleaned_data['file']
+            uploaded_file = form.cleaned_data["file"]
 
             try:
                 df = pd.read_excel(uploaded_file)
@@ -45,27 +45,30 @@ def add_item(request):
                     status = row[4]
 
                     # Check if a similar item already exists
-                    if Item.objects.filter(name=name, number=number, status=status).exists():
-                        messages.warning(request, f"Item with name: {name}, number: {number}, status: {status} already exists. Skipping.")
+                    if Item.objects.filter(
+                        name=name, number=number, status=status
+                    ).exists():
+                        messages.warning(
+                            request,
+                            f"Item with name: {name}, number: {number}, status: {status} already exists. Skipping.",
+                        )
                         continue
 
                     # If not, add the item
                     item = Item.objects.create(
-                        name=name,
-                        number=number,
-                        description=description,
-                        status=status
+                        name=name, number=number, description=description, status=status
                     )
                     item.save()
 
                 messages.success(request, "Items saved successfully")
             except Exception as e:
-                messages.error(request, f"Something went wrong with your file: {str(e)}")
+                messages.error(
+                    request, f"Something went wrong with your file: {str(e)}"
+                )
         else:
             messages.error(request, "Form is not valid.")
 
-    return render(request, "inventory/add_item.html", {'form': form})
-
+    return render(request, "inventory/add_item.html", {"form": form})
 
 
 class UserViewSet(viewsets.ModelViewSet):
