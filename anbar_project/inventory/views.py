@@ -1,7 +1,8 @@
 from .models import Item
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from pathlib import Path
+from .forms import FileUploadForm
 
 # drf
 from django.contrib.auth.models import User, Group
@@ -17,18 +18,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 def add_item(request):
-    file_path = os.path.join(BASE_DIR, "/source.xlsx")
-    print(f"-----------------{os.path.join(BASE_DIR, 'templates')}----------------")
-    file_path = "/home/mohammadamin/Desktop/inventory_project/inventory/anbar_project/source.xlsx"
-    print(file_path)
-    df = pd.read_excel(file_path)
-    for _, row in df.iterrows():
-        row_list = row.to_list()
-        item = Item.objects.create(name=row_list[1], number=row_list[2],description=row_list[3],status=row_list[4])
-        item.save()
+    form = FileUploadForm()
+    if request.method == 'POST':
+        form = FileUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            uploaded_file = form.cleaned_data['file']
+            df = pd.read_excel(uploaded_file)
+            for _, row in df.iterrows():
+                row_list = row.to_list()
+                item = Item.objects.create(name=row_list[1], number=row_list[2],description=row_list[3],status=row_list[4])
+                item.save()
+        else:
+            form = FileUploadForm()
     
     # return HttpResponse("Item added")
-    return render(request, "inventory/add_item.html")
+    return render(request, "inventory/add_item.html", {'form':form})
 
 
 class UserViewSet(viewsets.ModelViewSet):
