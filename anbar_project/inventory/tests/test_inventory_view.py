@@ -7,6 +7,6 @@ class TestItemViews(TestCase):
         self.client = Client()
 
     def test_item_index_url_successful(self):
-        url = reverse("inventory:test")
+        url = reverse("inventory:add_item")
         response = self.client.get(url)
         self.assertEquals(response.status_code, 200)
