@@ -1,38 +1,18 @@
 from .models import Item
-from django.http import HttpResponse
-from django.shortcuts import render, redirect
-from pathlib import Path
+from django.shortcuts import render
 from .forms import FileUploadForm
 from django.contrib import messages
 
 # drf
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
+from rest_framework.viewsets import ViewSet
 from rest_framework import permissions
 from .serializers import UserSerializer, GroupSerializer, ItemSerializer
-from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated, AllowAny
-
-from django.utils.decorators import method_decorator
-
-from django.views.decorators.csrf import csrf_exempt
 from .serializers import UploadSerializer
 
 # 3rd party
-import pandas as pd
-
-import os
-
-BASE_DIR = Path(__file__).resolve().parent.parent
-from rest_framework.viewsets import ViewSet
-
-from django.contrib import messages
-from django.shortcuts import render, redirect
-from .forms import FileUploadForm
-from .models import Item
 import pandas as pd
 
 
