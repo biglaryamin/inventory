@@ -107,16 +107,15 @@ class ItemViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
 
 
-
 class UploadViewSet(ViewSet):
     serializer_class = UploadSerializer
     permission_classes = [permissions.AllowAny]
 
     def list(self, request):
         return Response("GET API")
-    
+
     def create(self, request):
-        file_uploaded = request.FILES.get('file_uploaded')
+        file_uploaded = request.FILES.get("file_uploaded")
         df = pd.read_excel(file_uploaded)
 
         for _, row in df.iterrows():

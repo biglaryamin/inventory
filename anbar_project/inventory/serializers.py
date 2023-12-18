@@ -23,5 +23,6 @@ class ItemSerializer(ModelSerializer):
 
 class UploadSerializer(Serializer):
     file_uploaded = FileField()
+
     class Meta:
-        fields = ['file_uploaded']
+        fields = ["file_uploaded"]
