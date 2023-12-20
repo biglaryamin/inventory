@@ -8,6 +8,7 @@ from inventory.models import Item
 import os
 from django.core.files.uploadedfile import SimpleUploadedFile
 
+file_path = "/home/mohammadamin/Desktop/inventory_project/inventory/anbar_project/source.xlsx"
 
 class InventoryAppViewsTestCase(TestCase):
     def setUp(self):
@@ -65,7 +66,6 @@ class InventoryAppViewsTestCase(TestCase):
         self.client.force_authenticate(user=self.user)
 
         # Prepare the file for upload
-        file_path = "/home/mohammadamin/Desktop/inventory_project/inventory/anbar_project/source.xlsx"
 
         with open(file_path, "rb") as file:
             file_content = file.read()
@@ -81,3 +81,25 @@ class InventoryAppViewsTestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # Add more test cases as needed
+
+    def test_upload_viewset_duplicate_items(self):
+        # Log in the user
+        self.client.force_authenticate(user=self.user)
+
+        # Prepare a file with duplicate items for upload
+
+        with open(file_path, "rb") as file:
+            file_content = file.read()
+            file_name = os.path.basename(file_path)
+
+            uploaded_file = SimpleUploadedFile(file_name, file_content)
+
+            # Test the UploadViewSet
+            response = self.client.post(
+                "http://127.0.0.1:8000/upload/", {"file_uploaded": uploaded_file}
+            )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Check the database to verify that duplicate items were not created
+        self.assertEqual(Item.objects.count(), 4)
