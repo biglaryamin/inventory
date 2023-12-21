@@ -35,3 +35,5 @@ class Item(models.Model):
 
     class Meta:
         unique_together = ("name", "number", "status")
+        verbose_name = "کالا"
+        verbose_name_plural = "کالاها"
