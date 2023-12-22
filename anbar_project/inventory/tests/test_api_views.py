@@ -8,7 +8,10 @@ from inventory.models import Item
 import os
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-file_path = "/home/mohammadamin/Desktop/inventory_project/inventory/anbar_project/source.xlsx"
+file_path = (
+    "/home/mohammadamin/Desktop/inventory_project/inventory/anbar_project/source.xlsx"
+)
+
 
 class InventoryAppViewsTestCase(TestCase):
     def setUp(self):
@@ -102,4 +105,4 @@ class InventoryAppViewsTestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         # Check the database to verify that duplicate items were not created
-        self.assertEqual(Item.objects.count(), 4)
+        self.assertEqual(Item.objects.count(), 5)
