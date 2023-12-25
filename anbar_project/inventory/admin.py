@@ -1,7 +1,4 @@
 from django.contrib import admin
-from django.utils.translation import gettext_lazy as _
-from django.urls import reverse
-from django.http import HttpResponseRedirect
 from .models import Item
 
 from imagekit.admin import AdminThumbnail
