@@ -8,9 +8,9 @@ from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
 from rest_framework.viewsets import ViewSet
 from rest_framework import permissions
-from .serializers import UserSerializer, GroupSerializer, ItemSerializer
+from .api.v1.serializers import UserSerializer, GroupSerializer, ItemSerializer
 from rest_framework.response import Response
-from .serializers import UploadSerializer
+from .api.v1.serializers import UploadSerializer
 
 # 3rd party
 import pandas as pd
